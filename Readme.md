@@ -118,3 +118,6 @@ var isAnagram = function(s, t) {
     return true;
 };
 ```
+
+Time complexity: O(a+b)
+Space complexity O(M) where m is the size of different letters
