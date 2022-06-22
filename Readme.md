@@ -8,8 +8,8 @@ The question maked as "blind" are from famous Blind 75 list.
 
 ### 217. Contains Duplicate (Blind)
 
-Given an integer array nums, return true if any value appears at least twice in
-the array, and return false if every element is distinct.
+Given an integer array `nums`, return `true` if any value appears at least twice
+in the array, and return `false` if every element is distinct.
 
 **Example 1**:
 
@@ -53,6 +53,7 @@ var containsDuplicate = function(nums) {
 ```
 
 Time Complexity: O(n)
+
 Space Complexity O(n)
 
 ### 242. Valid Anagram (Blind)
@@ -120,6 +121,7 @@ var isAnagram = function(s, t) {
 ```
 
 Time complexity: O(a+b)
+
 Space complexity O(M) where m is the size of different letters
 
 ### 1. Two Sum
@@ -180,4 +182,5 @@ var twoSum = function(nums, target) {
 ```
 
 Time Complexity: O(n)
+
 Space Complexity O(n)
