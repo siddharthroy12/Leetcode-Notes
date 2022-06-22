@@ -247,3 +247,8 @@ var groupAnagrams = function(strs) {
     return Object.values(res);
 };
 ```
+
+Time Complexity: O(m * n) where n is the number of strings and m is
+the average length of the string.
+
+Space Complexity: O(n)
