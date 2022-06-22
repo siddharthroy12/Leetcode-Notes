@@ -160,7 +160,7 @@ Output: [0,1]
 
 Create a hashmap to store seen numbers with it's index.
 
-Loop through each number, calculate target - number, the other pair(the result)
+Loop through each number, calculate target - number, if the other pair(the result)
 exists inside the hashmap then just return the two indexes.
 
 If the other pair does not exist store the current number in the hashmap.
