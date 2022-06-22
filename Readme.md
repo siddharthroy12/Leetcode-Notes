@@ -1,6 +1,6 @@
 # My Leetcode notes and solutions
 
-These questions are taken from neetcode.io
+These questions are taken from [neetcode.io](https://neetcode.io/)
 
 The question maked as "blind" are from famous Blind 75 list.
 
