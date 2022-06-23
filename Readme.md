@@ -4,6 +4,15 @@ These questions are taken from [neetcode.io](https://neetcode.io/)
 
 The question maked as "blind" are from famous Blind 75 list.
 
+## Table of Questions
+
+1. [Array and Hasing](#array-and-hashing)
+    1. [Contains Duplicate (Blind)](#217-contains-duplicate-blind)
+    2. [Valid Anagram (Blind)](#242-valid-anagram-blind)
+    3. [Two Sum (Blind)](#1-two-sum-blind)
+    4. [Group Anagrams (Blind)](#49-group-anagrams-blind)
+    5. [Top K Frequent Elements (Blind)](#347-top-k-frequent-elements-blind)
+
 ## Array and Hashing
 
 ### 217. Contains Duplicate (Blind)
@@ -185,7 +194,7 @@ Time Complexity: O(n)
 
 Space Complexity O(n)
 
-### 49. Group Anagrams
+### 49. Group Anagrams (Blind)
 
 Given an array of strings `strs`, group the *anagrams* together.
 You can return the answer in any order.
@@ -253,7 +262,7 @@ the average length of the string.
 
 Space Complexity: O(n)
 
-### 347. Top K Frequent Elements
+### 347. Top K Frequent Elements (Blind)
 
 Given an integer array nums and an integer `k`, return the `k` most frequent elements.
 You may return the answer in any order.
