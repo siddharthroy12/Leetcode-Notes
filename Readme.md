@@ -12,7 +12,9 @@ The question maked as "blind" are from famous Blind 75 list.
     3. [Two Sum (Blind)](#1-two-sum-blind)
     4. [Group Anagrams (Blind)](#49-group-anagrams-blind)
     5. [Top K Frequent Elements (Blind)](#347-top-k-frequent-elements-blind)
-2. [Heap and Priority Queue](#heap-and-priority-queue)
+2. [Trie](#trie)
+    1. [Implement Trie](#208-implement-trie-blind)
+3. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
 
@@ -342,9 +344,150 @@ Time Complexity: O(n)
 
 Space Complexity O(n)
 
+## Trie
+
+### 208. Implement Trie (Blind)
+
+A trie (pronounced as "try") or prefix tree is a tree data structure used to
+efficiently store and retrieve keys in a dataset of strings.
+There are various applications of this data structure, such as autocomplete and spellchecker.
+
+Implement the Trie class:
+
+- `Trie()` Initializes the trie object.
+- `void insert(String word)` Inserts the string `word` into the trie.
+- `boolean search(String word)` Returns `true` if the string `word` is in
+the trie (i.e., was inserted before), and `false` otherwise.
+- `boolean startsWith(String prefix)` Returns `true` if there is a previously
+inserted string `word` that has the prefix `prefix`, and `false` otherwise.
+
+**Example 1**:
+
+```
+Input
+
+["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
+[[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]
+
+Output
+
+[null, null, true, false, true, null, true]
+
+Explanation
+
+Trie trie = new Trie();
+trie.insert("apple");
+trie.search("apple");   // return True
+trie.search("app");     // return False
+trie.startsWith("app"); // return True
+trie.insert("app");
+trie.search("app");     // return True
+```
+
+**Solution**:
+
+```js
+class TrieNode {
+  constructor(value) {
+    this.value = value;
+    this.nexts = {};
+    this.end = false;
+  }
+}
+
+var Trie = function() {
+    this.root = new TrieNode(null);
+};
+
+/**
+ * @param {string} word
+ * @return {void}
+ */
+Trie.prototype.insert = function(word) {
+    let currentNode = this.root;
+
+  for (let i = 0; i < word.length; i++) {
+    const letter = word[i];
+
+    if (currentNode.nexts[letter]) {
+      currentNode = currentNode.nexts[letter];
+
+      if (i === word.length-1) {
+        currentNode.end = true;
+      }
+
+      continue;
+    } else {
+      let newNode = new TrieNode(letter);
+
+      currentNode.nexts[letter] = newNode;
+
+      currentNode = newNode;
+
+      if (i === word.length-1) {
+        currentNode.end = true;
+      }
+
+      continue;
+    }
+  }
+};
+
+/** 
+ * @param {string} word
+ * @return {boolean}
+ */
+Trie.prototype.search = function(word) {
+    let currentNode = this.root;
+
+  for (let i = 0; i < word.length; i++) {
+    const letter = word[i];
+
+    if (!currentNode.nexts[letter]) {
+      return true;
+    }
+
+    currentNode = currentNode.nexts[letter];
+  }
+
+  return currentNode.end;
+};
+
+/**
+ * @param {string} prefix
+ * @return {boolean}
+ */
+Trie.prototype.startsWith = function(prefix) {
+    let currentNode = this.root;
+
+  for (let i = 0; i < prefix.length; i++) {
+    const letter = prefix[i];
+
+    if (!currentNode.nexts[letter]) {
+      return true;
+    }
+
+    currentNode = currentNode.nexts[letter];
+  }
+
+  return Object.keys(currentNode).length > 0;
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * var obj = new Trie()
+ * obj.insert(word)
+ * var param_2 = obj.search(word)
+ * var param_3 = obj.startsWith(prefix)
+ */
+```
+
+Every method in this class has Time Complexity of O(n) where n is the
+length of the input word.
+
 ## Heap and Priority Queue
 
-### Kth Largest Element in a Stream
+### 703. Kth Largest Element in a Stream
 
 Design a class to find the kth largest element in a stream. Note that it is
 the kth largest element in the sorted order, not the kth distinct element.
