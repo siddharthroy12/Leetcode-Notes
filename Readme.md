@@ -12,6 +12,7 @@ The question maked as "blind" are from famous Blind 75 list.
     3. [Two Sum (Blind)](#1-two-sum-blind)
     4. [Group Anagrams (Blind)](#49-group-anagrams-blind)
     5. [Top K Frequent Elements (Blind)](#347-top-k-frequent-elements-blind)
+    6. [Product of Array Except Self](#238-product-of-array-except-self)
 2. [Trie](#trie)
     1. [Implement Trie](#208-implement-trie-blind)
 3. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -343,6 +344,73 @@ var topKFrequent = function(nums, k) {
 Time Complexity: O(n)
 
 Space Complexity O(n)
+
+### 238. Product of Array Except Self
+
+Given an integer array `nums`, return an array `answer` such that `answer[i]`
+is equal to the product of all the elements of nums except `nums[i]`.
+
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+You must write an algorithm that runs in O(n) time and without using the
+division operation.
+
+**Example 1**:
+
+Input: nums = [1,2,3,4]
+Output: [24,12,8,6]
+
+**Example 2**:
+
+Input: nums = [-1,1,0,-3,3]
+Output: [0,0,9,0,0]
+
+**Solution**:
+
+We need to create two arrays with the length of input.
+
+In one array each element is equal the the product of all element in
+it's left side of input.
+
+Do one for the right side too.
+
+Now create the `result` array and for each element you just need to multiply
+the left side of left array and right side of right array.
+
+```python
+class Solution:
+    def productExceptSelf(self, nums):
+        left_products = [None] * len(nums)
+        right_products = [None] * len(nums)
+        answer = []
+
+        previous_product = 1
+
+        for i in range(0, len(nums)):
+            product = previous_product * nums[i]
+            left_products[i] = product
+            previous_product = product
+
+        previous_product = 1
+
+        for i in reversed(range(len(nums))):
+            product = previous_product * nums[i]
+            right_products[i] = product
+            previous_product = product
+
+        for i in range(len(nums)):
+            current_product = 1
+
+            if i > 0:
+                current_product = current_product * left_products[i-1]
+
+            if i < len(nums)- 1:
+                current_product = current_product * right_products[i+1]
+
+            answer.append(current_product)
+
+        return answer
+```
 
 ## Trie
 
