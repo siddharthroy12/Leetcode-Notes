@@ -444,7 +444,7 @@ Trie.prototype.search = function(word) {
     const letter = word[i];
 
     if (!currentNode.nexts[letter]) {
-      return true;
+      return false;
     }
 
     currentNode = currentNode.nexts[letter];
@@ -464,7 +464,7 @@ Trie.prototype.startsWith = function(prefix) {
     const letter = prefix[i];
 
     if (!currentNode.nexts[letter]) {
-      return true;
+      return false;
     }
 
     currentNode = currentNode.nexts[letter];
