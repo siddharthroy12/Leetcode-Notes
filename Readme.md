@@ -13,11 +13,15 @@ The question maked as "blind" are from famous Blind 75 list.
     4. [Group Anagrams (Blind)](#49-group-anagrams-blind)
     5. [Top K Frequent Elements (Blind)](#347-top-k-frequent-elements-blind)
     6. [Product of Array Except Self](#238-product-of-array-except-self)
+    7. [Valid Sudoku](#36-valid-sudoku)
 2. [Trie](#trie)
     1. [Implement Trie](#208-implement-trie-blind)
 3. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
+4. [Backtracking](#backtracking)
+    1. [Permutations](#46-permutations)
+    2. [Sudoku Solver](#37-sudoku-solver)
 
 ## Array and Hashing
 
@@ -412,6 +416,94 @@ class Solution:
         return answer
 ```
 
+### 36. Valid Sudoku
+
+Determine if a `9 x 9` Sudoku board is valid. Only the filled cells need to be 
+validated according to the following rules:
+
+1. Each row must contain the digits `1-9` without repetition.
+2. Each column must contain the digits `1-9` without repetition.
+3. Each of the nine `3 x 3` sub-boxes of the grid must contain the digits `1-9` 
+without repetition.
+
+**Note**:
+- A Sudoku board (partially filled) could be valid but is not necessarily 
+solvable.
+- Only the filled cells need to be validated according to the mentioned rules.
+
+**Example 1**:
+
+```
+Input: board = 
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+
+Output: true
+```
+**Example 2**:
+
+```
+Input: board = 
+[["8","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: false
+
+Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since
+there are two 8's in the top left 3x3 sub-box, it is invalid.
+```
+
+**Solution**:
+
+```python
+from math import floor
+
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        for x in range(9):
+            for y in range(9):
+                num = board[x][y]
+                
+                if num != ".":
+                    board[x][y] = "0"
+
+
+                    # Check row
+                    for xi in range(9):
+                        if board[xi][y] == num:
+                            return False
+
+                    # Check columns
+                    for yi in range(9):
+                        if board[x][yi] == num:
+                            return False
+
+                    # Check 3x3 sub grid
+                    grid_x = floor(x/3) * 3
+                    grid_y = floor(y/3) * 3
+
+                    for xi in range(grid_x, grid_x+3):
+                        for yi in range(grid_y, grid_y+3):
+                            if board[xi][yi] == num:
+                                return False
+
+                    board[x][y] = num
+        return True
+```
+
 ## Trie
 
 ### 208. Implement Trie (Blind)
@@ -723,3 +815,150 @@ Time Complexity: O(n log n)
 
 Space Complexity O(n)
 
+## Backtracking
+
+### 46. Permutations
+
+Given an array `nums` of distinct integers, return all the possible permutations. You can return the answer in **any order**.
+
+**Example 1**:
+
+```
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+```
+
+**Example 2**:
+
+```
+Input: nums = [0,1]
+Output: [[0,1],[1,0]]
+```
+
+**Example 3**:
+
+```
+Input: nums = [1]
+Output: [[1]]
+```
+
+**Solution**:
+
+```pyhton
+class Solution:
+    def solve(self, nums, results=[], progress=[], used={}):
+        for num in nums:
+            if not num in used or not used[num]:
+                used[num] = True
+                progress.append(num)
+                self.solve(nums, results, progress, used)
+                used[num] = False
+                progress.pop()
+        
+        if len(nums) == len(progress):
+            print(progress)
+            results.append(progress.copy())
+    
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        results = []
+        self.solve(nums, results)
+        return results
+```
+
+### 37. Sudoku Solver
+
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+
+A sudoku solution must satisfy **all of the following rules**:
+
+1. Each of the digits `1-9` must occur exactly once in each row.
+2. Each of the digits `1-9` must occur exactly once in each column.
+3. Each of the digits `1-9` must occur exactly once in each of the 9 `3x3`
+sub-boxes of the grid.
+
+The `'.'` character indicates empty cells.
+
+**Example 1**:
+
+```
+Input: board = [
+    ["5","3",".",".","7",".",".",".","."],
+    ["6",".",".","1","9","5",".",".","."],
+    [".","9","8",".",".",".",".","6","."],
+    ["8",".",".",".","6",".",".",".","3"],
+    ["4",".",".","8",".","3",".",".","1"],
+    ["7",".",".",".","2",".",".",".","6"],
+    [".","6",".",".",".",".","2","8","."],
+    [".",".",".","4","1","9",".",".","5"],
+    [".",".",".",".","8",".",".","7","9"]]
+
+Output: [
+    ["5","3","4","6","7","8","9","1","2"],
+    ["6","7","2","1","9","5","3","4","8"],
+    ["1","9","8","3","4","2","5","6","7"],
+    ["8","5","9","7","6","1","4","2","3"],
+    ["4","2","6","8","5","3","7","9","1"],
+    ["7","1","3","9","2","4","8","5","6"],
+    ["9","6","1","5","3","7","2","8","4"],
+    ["2","8","7","4","1","9","6","3","5"],
+    ["3","4","5","2","8","6","1","7","9"]]
+
+Explanation: The input board is shown above and the only valid solution is shown below:
+```
+
+**Solution**:
+
+```python
+class Solution:
+    def getValidNumbers(self, board, x, y):
+        validNumbers = {}
+        
+        for i in range(1, 10):
+            validNumbers[str(i)] = True
+        
+        # Row
+        for xi in range(len(board)):
+            validNumbers[board[xi][y]] = False
+        
+        # Columns
+        for yi in range(len(board)):
+            validNumbers[board[x][yi]] = False
+            
+        # 3x3 grid
+        gridX = floor(x/3) * 3
+        gridY = floor(y/3) * 3
+        
+        for xi in range(gridX, gridX+3):
+            for yi in range(gridY, gridY+3):
+                validNumbers[board[xi][yi]] = False
+                
+        results = []
+        
+        for i in range(1, 10):
+            if validNumbers[str(i)]:
+                results.append(str(i))
+        
+        return results
+    
+    def solveSudoku(self, board):
+        for x in range(len(board)):
+            for y in range(len(board)):
+                if board[x][y] == ".":
+                    validNumbers = self.getValidNumbers(board, x, y)
+                    
+                    for number in validNumbers:
+                        board[x][y] = number
+
+                        
+                        res = self.solveSudoku(board)
+                        
+                        if not res:
+                            board[x][y] = "."
+                            continue
+                        else:
+                            return True
+        
+                    return False
+        return True
+
+```
