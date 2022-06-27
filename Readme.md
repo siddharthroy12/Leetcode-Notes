@@ -21,6 +21,7 @@ The question maked as "blind" are from famous Blind 75 list.
     2. [Two Sum II](#167-two-sum-ii)
     3. [3Sum (Blind)](#15-3sum-blind)
     4. [Container With Most Water (Blind)](#11-container-with-most-water-blind)
+    5. [Trapping Rain Water](#42-trapping-rain-water)
 3. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 4. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -895,6 +896,76 @@ class Solution:
                 right -= 1
         return max_area
 ```
+
+### 42. Trapping Rain Water
+
+Given `n` non-negative integers representing an elevation map where the width of each bar is 
+`1`, compute how much water it can trap after raining.
+
+**Example 1**:
+
+```
+Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
+```
+
+**Example 2**:
+
+```
+Input: height = [4,2,0,3,2,5]
+Output: 9
+```
+
+**Solution**:
+
+To calculate how much water can be stored in each place you need to check the highest height
+on the left and right side and get the minimum of that. Then minus it with the height of
+current place.
+
+```python
+class Solution:
+    def trap(self, height):
+        water = [0] * len(height)
+
+        highest_from_left = [0] * len(height)
+        highest = 0
+        
+        # Calculate left highest for every palce
+        for i, h in enumerate(height):
+            if h > highest:
+                highest = h
+            highest_from_left[i] = highest
+
+        highest_from_right = [0] * len(height)
+        highest = 0
+        
+        # Calculate right highest for every palce
+        for i, h in enumerate(reversed(height)):
+            i = len(height) - 1 - i
+
+            if h > highest:
+                highest = h
+            highest_from_right[i] = highest
+        
+        # Calculate height of water for every place
+        # Calculate the min of left and right highest and minus current height from it
+        for i, h in enumerate(height):
+            min_ = min(highest_from_left[i], highest_from_right[i])
+            if min_ > h:
+                water[i] = min_-h
+        
+        # Count water
+        total = 0
+        for h in water:
+            total += h
+
+        return total
+```
+
+Time Complexity O(n)
+
+Space Complexity O(n)
 
 ## Trie
 
