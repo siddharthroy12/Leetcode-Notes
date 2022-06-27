@@ -16,12 +16,15 @@ The question maked as "blind" are from famous Blind 75 list.
     7. [Valid Sudoku](#36-valid-sudoku)
     8. [Encode and Decode Strings](#271-encode-and-decode-strings)
     9. [Longest Consecutive Sequence](#128-longest-consecutive-sequence)
-2. [Trie](#trie)
+2. [Two Pointers](#two-pointers)
+    1. [Valid Palindrome](#125-valid-palindrome)
+    2. [Two Sum II](#167-two-sum-ii)
+3. [Trie](#trie)
     1. [Implement Trie](#208-implement-trie-blind)
-3. [Heap and Priority Queue](#heap-and-priority-queue)
+4. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
-4. [Backtracking](#backtracking)
+5. [Backtracking](#backtracking)
     1. [Permutations](#46-permutations)
     2. [Sudoku Solver](#37-sudoku-solver)
 
@@ -643,7 +646,142 @@ class Solution:
         return longest_length
 
 ```
+## Two Pointers
 
+### 125. Valid Palindrome
+
+A phrase is a **palindrome** if, after converting all uppercase letters into 
+lowercase letters and removing all non-alphanumeric characters, it reads the same 
+forward and backward. Alphanumeric characters include letters and numbers.
+
+Given a string `s`, return `true` if it is a palindrome, or `false` otherwise.
+
+**Example 1**:
+
+```
+Input: s = "A man, a plan, a canal: Panama"
+Output: true
+Explanation: "amanaplanacanalpanama" is a palindrome.
+```
+
+**Example 2**:
+
+```
+Input: s = "race a car"
+Output: false
+Explanation: "raceacar" is not a palindrome.
+```
+
+**Example 3**:
+
+```
+Input: s = " "
+Output: true
+Explanation: s is an empty string "" after removing non-alphanumeric characters.
+Since an empty string reads the same forward and backward, it is a palindrome.
+```
+
+**Solution**:
+
+```python
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        alphanumeric_string = ""
+        
+        # Get Alphanumeric string
+        for letter in s:
+            ascii_value = ord(letter)
+            
+            # For numbers
+            if ascii_value >= 48 and ascii_value <= 57:
+                alphanumeric_string += letter
+            
+            # For Uppercase letters
+            elif ascii_value >= 65 and ascii_value <= 90:
+                alphanumeric_string += letter.lower()
+            
+            # For Lowercase letters
+            elif ascii_value >= 97 and ascii_value <= 122:
+                alphanumeric_string += letter
+        
+        left = 0
+        right = len(alphanumeric_string) - 1
+        
+        while (left < right):
+            if alphanumeric_string[left] != alphanumeric_string[right]:
+                return False
+            
+            left += 1
+            right -= 1
+        
+        return True
+```
+
+### 167. Two Sum II
+
+Given a 1-indexed array of integers `numbers` that is already sorted in 
+non-decreasing order, find two numbers such that they add up to a specific 
+`target` number. Let these two numbers be `numbers[index1]` and `numbers[index2]` 
+where `1 <= index1 < index2 <= numbers.length`.
+
+Return the indices of the two numbers, `index1` and `index2`, added by one as an 
+integer array `[index1, index2]` of length 2.
+
+The tests are generated such that there is **exactly one solution**. You **may 
+not** use the same element twice.
+
+Your solution must use only constant extra space.
+
+**Example 1**:
+
+```
+Input: numbers = [2,7,11,15], target = 9
+Output: [1,2]
+Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [1, 2].
+```
+
+**Example 2**:
+
+```
+Input: numbers = [2,3,4], target = 6
+Output: [1,3]
+Explanation: The sum of 2 and 4 is 6. Therefore index1 = 1, index2 = 3. We return [1, 3].
+```
+
+**Example 3**:
+
+```
+Input: numbers = [-1,0], target = -1
+Output: [1,2]
+Explanation: The sum of -1 and 0 is -1. Therefore index1 = 1, index2 = 2. We return [1, 2].
+```
+
+**Solution**:
+
+Have two pointers pointing at the first and the last element of the array.
+
+Calculate the sum, if the sum is bigger than target then that means you have to
+move the last pointer towards left to decrease the sum and the exact opposite for
+the first pointer.
+
+Once the sum is equal to the target return the indexes with +1.
+
+```python
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        left = 0;
+        right = len(numbers) - 1
+        
+        while (left < right):
+            value = numbers[left] + numbers[right]
+            
+            if value == target:
+                return [left+1, right+1]
+            elif value > target:
+                right -= 1
+            else:
+                left += 1
+```
 
 ## Trie
 
