@@ -12,15 +12,16 @@ The question maked as "blind" are from famous Blind 75 list.
     3. [Two Sum (Blind)](#1-two-sum-blind)
     4. [Group Anagrams (Blind)](#49-group-anagrams-blind)
     5. [Top K Frequent Elements (Blind)](#347-top-k-frequent-elements-blind)
-    6. [Product of Array Except Self](#238-product-of-array-except-self)
+    6. [Product of Array Except Self (Blind)](#238-product-of-array-except-self-blind)
     7. [Valid Sudoku](#36-valid-sudoku)
-    8. [Encode and Decode Strings](#271-encode-and-decode-strings)
-    9. [Longest Consecutive Sequence](#128-longest-consecutive-sequence)
+    8. [Encode and Decode Strings (Blind)](#271-encode-and-decode-strings-blind)
+    9. [Longest Consecutive Sequence (Blind)](#128-longest-consecutive-sequence-blind)
 2. [Two Pointers](#two-pointers)
-    1. [Valid Palindrome](#125-valid-palindrome)
+    1. [Valid Palindrome (Blind)](#125-valid-palindrome-blind)
     2. [Two Sum II](#167-two-sum-ii)
+    3. [3Sum (Blind)](#15-3sum-blind)
 3. [Trie](#trie)
-    1. [Implement Trie](#208-implement-trie-blind)
+    1. [Implement Trie (Blind)](#208-implement-trie-blind)
 4. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
@@ -354,7 +355,7 @@ Time Complexity: O(n)
 
 Space Complexity O(n)
 
-### 238. Product of Array Except Self
+### 238. Product of Array Except Self (Blind)
 
 Given an integer array `nums`, return an array `answer` such that `answer[i]`
 is equal to the product of all the elements of nums except `nums[i]`.
@@ -509,7 +510,7 @@ class Solution:
         return True
 ```
 
-### 271. Encode and Decode Strings
+### 271. Encode and Decode Strings (Blind)
 
 Design an algorithm to encode a list of strings to a string. The encoded string is 
 then sent over the network and is decoded back to the original list of strings.
@@ -589,7 +590,7 @@ class Solution:
         return result
 ```
 
-### 128. Longest Consecutive Sequence
+### 128. Longest Consecutive Sequence (Blind)
 
 Given an unsorted array of integers nums, return the length of the longest
 consecutive elements sequence.
@@ -648,7 +649,7 @@ class Solution:
 ```
 ## Two Pointers
 
-### 125. Valid Palindrome
+### 125. Valid Palindrome (Blind)
 
 A phrase is a **palindrome** if, after converting all uppercase letters into 
 lowercase letters and removing all non-alphanumeric characters, it reads the same 
@@ -782,6 +783,61 @@ class Solution:
             else:
                 left += 1
 ```
+
+### 15. 3Sum (Blind)
+
+Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]]` 
+such that `i != j, i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
+
+Notice that the solution set must not contain duplicate triplets.
+
+**Example 1**:
+
+```
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+```
+
+**Example 2**:
+
+```
+Input: nums = []
+Output: []
+```
+
+**Example 3**:
+
+```
+Input: nums = [0]
+Output: []
+```
+
+**Solution**:
+
+Basically Two sum with a outer loop.
+
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        triplets = set()
+
+        for i, num1 in enumerate(nums):
+            seen = set() # Two sum starts here
+            for j, num2 in enumerate(nums[i+1:]): # i + 1 Because i != j =! k
+                num3 = -(num1+num2)
+                if num3 in seen:
+                    triplet = tuple(sorted([num1,num2,num3]))
+                    # Saving in a hashset to avoid duplicates
+                    triplets.add(triplet)
+                else:
+                    seen.add(num2)
+        
+        return triplets
+```
+
+Time Complexity O(n^2)
+
+Space Complexity O(n)
 
 ## Trie
 
