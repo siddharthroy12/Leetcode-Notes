@@ -899,7 +899,7 @@ class Solution:
 
 ### 42. Trapping Rain Water
 
-Given `n` non-negative integers representing an elevation map where the width of each bar is 
+Given `n` non-negative integers representing an elevation map where the width of each bar is
 `1`, compute how much water it can trap after raining.
 
 **Example 1**:
@@ -966,6 +966,36 @@ class Solution:
 Time Complexity O(n)
 
 Space Complexity O(n)
+
+**Better Solution**:
+
+We will use two pointer one on the left and one on the right.
+And also keep track of the left highest and right heighest
+check which one is the lowest of left and right highest
+move the lowest one forward update the heightest and calculate the increase
+in total
+
+```python
+class Solution:
+    def trap(self, height):
+        total = 0
+
+        left = 0
+        right = len(height) - 1
+        maxLeft = height[left]
+        maxRight = height[right]
+
+        while left < right:
+            if maxLeft < maxRight:
+                left += 1
+                maxLeft = max(maxLeft, height[left])
+                total += maxLeft - height[left]
+            else:
+                right -= 1
+                maxRight = max(maxRight, height[right])
+                total += maxRight - height[right]
+        return total
+```
 
 ## Trie
 
