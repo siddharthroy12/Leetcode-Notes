@@ -24,6 +24,7 @@ The question maked as "blind" are from famous Blind 75 list.
     5. [Trapping Rain Water](#42-trapping-rain-water)
 3. [Sliding Window](#sliding-window)
     1. [Best Time to Buy and Sell Stock (Blind)](#121-best-time-to-buy-and-sell-stock-blind)
+    2. [Longest Substring Without Repeating Characters](#3-longest-substring-without-repeating-characters-blind)
 4. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 5. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -1063,6 +1064,65 @@ class Solution:
         return max_profit
 ```
 
+### 3. Longest Substring Without Repeating Characters
+
+Given a string `s`, find the length of the longest substring without repeating characters.
+
+**Example 1**:
+
+```
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+```
+
+**Example 2**:
+
+```
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+```
+**Example 3**:
+
+```
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+```
+
+**Solution**:
+
+Use sliding window
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        longest = 0
+        left = right = 0
+        seen = {}
+        
+        while right < len(s):
+            if s[right] in seen:
+                while s[right] in seen:
+                    del seen[s[left]]
+                    left += 1
+            
+            longest = max(longest, right - left + 1)
+            
+            seen[s[right]] = right
+            right += 1
+            
+        
+        return longest
+                
+```
+
+Time Complexity: O(n)
+
+Space Complexity: O(n)
+
 ## Trie
 
 ### 208. Implement Trie (Blind)
@@ -1471,52 +1531,52 @@ Explanation: The input board is shown above and the only valid solution is shown
 class Solution:
     def getValidNumbers(self, board, x, y):
         validNumbers = {}
-        
+
         for i in range(1, 10):
             validNumbers[str(i)] = True
-        
+
         # Row
         for xi in range(len(board)):
             validNumbers[board[xi][y]] = False
-        
+
         # Columns
         for yi in range(len(board)):
             validNumbers[board[x][yi]] = False
-            
+
         # 3x3 grid
         gridX = floor(x/3) * 3
         gridY = floor(y/3) * 3
-        
+
         for xi in range(gridX, gridX+3):
             for yi in range(gridY, gridY+3):
                 validNumbers[board[xi][yi]] = False
-                
+
         results = []
-        
+
         for i in range(1, 10):
             if validNumbers[str(i)]:
                 results.append(str(i))
-        
+
         return results
-    
+
     def solveSudoku(self, board):
         for x in range(len(board)):
             for y in range(len(board)):
                 if board[x][y] == ".":
                     validNumbers = self.getValidNumbers(board, x, y)
-                    
+
                     for number in validNumbers:
                         board[x][y] = number
 
-                        
+
                         res = self.solveSudoku(board)
-                        
+
                         if not res:
                             board[x][y] = "."
                             continue
                         else:
                             return True
-        
+
                     return False
         return True
 
