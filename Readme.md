@@ -24,7 +24,9 @@ The question maked as "blind" are from famous Blind 75 list.
     5. [Trapping Rain Water](#42-trapping-rain-water)
 3. [Sliding Window](#sliding-window)
     1. [Best Time to Buy and Sell Stock (Blind)](#121-best-time-to-buy-and-sell-stock-blind)
-    2. [Longest Substring Without Repeating Characters](#3-longest-substring-without-repeating-characters-blind)
+    2. [Longest Substring Without Repeating Characters (Blind)](#3-longest-substring-without-repeating-characters-blind)
+    3. [Longest Repeating Character Replacement (Blind)](#424-longest-repeating-character-replacement-blind)
+    4. [Permutation in String](#567-permutation-in-string)
 4. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 5. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -1113,7 +1115,6 @@ class Solution:
             
             seen[s[right]] = right
             right += 1
-            
         
         return longest
                 
@@ -1122,6 +1123,137 @@ class Solution:
 Time Complexity: O(n)
 
 Space Complexity: O(n)
+
+### 424. Longest Repeating Character Replacement (Blind)
+
+You are given a string `s` and an integer `k`. You can choose any
+character of the string and change it to any other uppercase English character.
+You can perform this operation at most `k` times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+
+**Example 1**:
+
+```
+Input: s = "ABAB", k = 2
+Output: 4
+Explanation: Replace the two 'A's with two 'B's or vice versa.
+```
+
+**Example 2**:
+
+```
+Input: s = "AABABBA", k = 1
+Output: 4
+Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
+The substring "BBBB" has the longest repeating letters, which is 4.
+```
+
+**Solution**:
+
+Use a sliding window and keep expanding it. If the window is valid then calculate the longest.
+If the window is not valid keep shrinking it unitl it is valid.
+
+A window is valid if the `size of window - highest frequency in window <= k`.
+
+```python
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        left = right = 0
+        seen = [0] * 27
+        longest = 0
+
+        # Sliding window in valid if the max frequency
+        # minus the size of window is <= k
+        def is_sliding_window_valid():
+            highest = 0
+            for i in range(ord("A"), ord("Z")+1):
+                highest = max(highest, seen[i-65])
+            if (right - left + 1) - highest <= k:
+                return True
+            return False
+
+        while right < len(s):
+            seen[ord(s[right])-65] += 1
+
+            if is_sliding_window_valid():
+                longest = max(longest, right - left)
+            else: # If sliding window is not valid then shrink it until valid
+                while not is_sliding_window_valid():
+                    seen[ord(s[left])-65] -= 1
+                    left += 1
+
+            right += 1
+
+        return longest + 1
+```
+
+Time Complexity O(n)
+
+Space Complexity O(1)
+
+### 567. Permutation in String
+
+Given two strings `s1` and `s2`, return `true` if `s2` contains a permutation of `s1`, 
+or `false` otherwise.
+
+In other words, return `true` if one of `s1`'s permutations is the substring of `s2`.
+
+**Example 1**:
+
+```
+Input: s1 = "ab", s2 = "eidbaooo"
+Output: true
+Explanation: s2 contains one permutation of s1 ("ba").
+```
+
+**Example 2**:
+
+```
+Input: s1 = "ab", s2 = "eidboaoo"
+Output: false
+```
+
+**Solution**:
+
+Use a sliding window of size s1 and check if it's the permutation of s1 at each step.
+
+```python
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        if len(s1) > len(s2):
+            return False
+
+        left = 0
+        right = len(s1) - 1
+        frequency_s1 = {}
+        frequency_window = {}
+
+        for letter in s1:
+            if letter not in frequency_s1:
+                frequency_s1[letter] = 1
+            else:
+                frequency_s1[letter] += 1
+
+        for i in range(right+1):
+            if s2[i] not in frequency_window:
+                frequency_window[s2[i]] = 1
+            else:
+                frequency_window[s2[i]] += 1
+
+        while frequency_s1 != frequency_window and right < len(s2) - 1:
+            frequency_window[s2[left]] -= 1
+            if frequency_window[s2[left]] == 0:
+                del frequency_window[s2[left]]
+            left += 1
+            right += 1
+            if s2[right] not in frequency_window:
+                frequency_window[s2[right]] = 1
+            else:
+                frequency_window[s2[right]] += 1
+
+        return frequency_s1 == frequency_window
+```
 
 ## Trie
 
