@@ -27,6 +27,8 @@ The question maked as "blind" are from famous Blind 75 list.
     2. [Longest Substring Without Repeating Characters (Blind)](#3-longest-substring-without-repeating-characters-blind)
     3. [Longest Repeating Character Replacement (Blind)](#424-longest-repeating-character-replacement-blind)
     4. [Permutation in String](#567-permutation-in-string)
+    5. [Minimum Window Substring (Blind)](#76-minimum-window-substring-blind)
+    6. [Sliding Window Maximum](#239-sliding-window-maximum)
 4. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 5. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -1253,6 +1255,191 @@ class Solution:
                 frequency_window[s2[right]] += 1
 
         return frequency_s1 == frequency_window
+```
+
+### 76. Minimum Window Substring (Blind)
+
+Given two strings `s` and `t` of lengths `m` and `n` respectively, return the 
+**minimum window substring** of s such that every character in `t` (**including 
+duplicates**) is included in the window. If there is no such substring, return the 
+empty string `""`.
+
+The testcases will be generated such that the answer is **unique**.
+
+A **substring** is a contiguous sequence of characters within the string.
+
+**Example 1**:
+
+```
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+```
+
+**Example 2**:
+
+```
+Input: s = "a", t = "a"
+Output: "a"
+Explanation: The entire string s is the minimum window.
+```
+
+**Example 3**:
+
+```
+Input: s = "a", t = "aa"
+Output: ""
+Explanation: Both 'a's from t must be included in the window.
+Since the largest window of s only has one 'a', return empty string.
+```
+
+**Solution**:
+
+Start from window with size 1
+increase the window from right until it includes k
+shrink the window from left until it not includes k
+
+save the size of window and left and right somewhere
+
+```python
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        if len(t) > len(s) :
+            return ""
+        window_frequency = {s[0]: 1}
+        t_frequency = {}
+        s_frequency = {}
+        window_left = 0
+        window_right = 0
+        window_sizes = {}
+        min_size = len(s)
+
+        # Calculate s frequency
+        for letter in s:
+            if letter not in s_frequency:
+                s_frequency[letter] = 1
+            else:
+                s_frequency[letter] += 1
+
+        # Calculate t frequency
+        for letter in t:
+            if letter not in s_frequency:
+                return ""
+            if letter not in t_frequency:
+                t_frequency[letter] = 1
+            else:
+                t_frequency[letter] += 1
+
+        def t_in_window():
+            for k, v in t_frequency.items():
+                if k not in window_frequency or window_frequency[k] < v:
+                    return False
+            return True
+
+        while True:
+            # Increase window from front
+            while (not t_in_window()) and (window_right < len(s) - 1):
+                window_right += 1
+
+                if s[window_right] not in window_frequency:
+                    window_frequency[s[window_right]] = 1
+                else:
+                    window_frequency[s[window_right]] += 1
+
+            # To get out of infinite loop
+            if not t_in_window():
+                break
+
+            # Decrease window from back
+            while t_in_window():
+                window_frequency[s[window_left]] -= 1
+                window_left += 1
+
+                window_sizes[window_right - window_left + 2] = [window_left, window_right]
+                min_size = min(min_size, window_right - window_left + 2)
+
+        if min_size not in window_sizes:
+            return ""
+    
+        res = ""
+        for i in range(window_sizes[min_size][0]-1, window_sizes[min_size][1]+1):
+            res += s[i]
+        return res
+```
+
+### 239. Sliding Window Maximum
+
+You are given an array of integers `nums`, there is a sliding window of 
+size `k` which is moving from the very left of the array to the very
+right. You can only see the `k` numbers in the window. Each time the 
+sliding window moves right by one position.
+
+Return the max sliding window.
+
+**Example 1**:
+
+```
+Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]
+Explanation: 
+Window position                Max
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+```
+
+**Example 2**:
+
+```
+Input: nums = [1], k = 1
+Output: [1]
+```
+
+**Solution**
+
+Use a deque and append the values in it as the window slides
+maintain the decreasing order by popping the values from the back if they
+are greater than the one you are going to append.
+
+and the window slides check if the number in the front of the deque
+is out of window if it is then pop it.
+
+```python
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        res = []
+        q = collections.deque() # Will store numbers in decreasing order
+        l = r = 0
+        
+        while r < len(nums):
+            # Pop greater values than current right pointer
+            # Before appending to right side
+            # To maintain the decreasing ordera
+            while len(q) and nums[q[-1]] < nums[r]:
+                q.pop()
+                
+            q.append(r)
+            
+            # Pop the greatest number or the front number if it's out of window
+            if l > q[0]:
+                q.popleft()
+            
+            # Because thre window start with size zero
+            # we need to check if the window has grown enough
+            # to start sliding the left pointer
+            # which we will use to check if the front of the deque
+            # is out of window
+            if (r + 1 >= k):
+                l += 1
+                res.append(nums[q[0]])
+            
+            r += 1
+        
+        return res
 ```
 
 ## Trie
