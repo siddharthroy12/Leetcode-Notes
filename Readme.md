@@ -1367,6 +1367,10 @@ class Solution:
         return res
 ```
 
+Time Complexity: O(n)
+
+Space Complexity: O(n)
+
 ### 239. Sliding Window Maximum
 
 You are given an array of integers `nums`, there is a sliding window of 
@@ -1441,6 +1445,10 @@ class Solution:
         
         return res
 ```
+
+Time Complexity: O(n)
+
+Space Complexity: O(n)
 
 ## Trie
 
