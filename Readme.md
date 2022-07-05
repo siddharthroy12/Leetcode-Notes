@@ -29,12 +29,17 @@ The question maked as "blind" are from famous Blind 75 list.
     4. [Permutation in String](#567-permutation-in-string)
     5. [Minimum Window Substring (Blind)](#76-minimum-window-substring-blind)
     6. [Sliding Window Maximum](#239-sliding-window-maximum)
-4. [Trie](#trie)
+4. [Stack](#stack)
+    1. [Valid Parentheses (Blind)](#20-valid-parentheses-blind)
+    2. [Min Stack](#155-min-stack)
+    3. [Evaluate Reverse Polish Notation](#150-evaluate-reverse-polish-notation)
+    4. [Generate Parentheses](#22-generate-parentheses)
+5. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
-5. [Heap and Priority Queue](#heap-and-priority-queue)
+6. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
-6. [Backtracking](#backtracking)
+7. [Backtracking](#backtracking)
     1. [Permutations](#46-permutations)
     2. [Sudoku Solver](#37-sudoku-solver)
 
@@ -1449,6 +1454,264 @@ class Solution:
 Time Complexity: O(n)
 
 Space Complexity: O(n)
+
+## Stack
+
+### 20. Valid Parentheses (Blind)
+
+Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}
+'`, `'['` and `']'`, determine if the input string is valid.
+
+An input string is valid if:
+
+1. Open brackets must be closed by the same type of brackets.
+2. Open brackets must be closed in the correct order.
+
+**Example 1**:
+
+```
+Input: s = "()"
+Output: true
+```
+
+**Example 2**:
+
+```
+Input: s = "()[]{}"
+Output: true
+```
+
+**Example 3**:
+
+```
+Input: s = "(]"
+Output: false
+```
+
+**Solution**:
+
+```python
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack = []
+
+        for letter in s:
+            if letter == "(" or letter == "{" or letter == "[":
+                stack.append(letter)
+            elif len(stack):
+                if letter == ")":
+                    if stack[len(stack)-1] == "(":
+                        stack.pop()
+                    else:
+                        return False
+                elif letter == "]":
+                    if stack[len(stack)-1] == "[":
+                        stack.pop()
+                    else:
+                        return False
+                elif letter == "}":
+                    if stack[len(stack)-1] == "{":
+                        stack.pop()
+                    else:
+                        return False
+            else:
+                return False
+
+        return len(stack) == 0
+```
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+### 155. Min Stack
+
+Design a stack that supports push, pop, top, and retrieving the minimum 
+element in constant time.
+
+Implement the `MinStack` class:
+
+- `MinStack()` initializes the stack object.
+- `void push(int val)` pushes the element `val` onto the stack.
+- `void pop()` removes the element on the top of the stack.
+- `int top()` gets the top element of the stack.
+- `int getMin()` retrieves the minimum element in the stack.
+
+You must implement a solution with `O(1)` time complexity for each 
+function.
+
+**Example 1**:
+
+```
+Input
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output
+[null,null,null,null,-3,null,0,-2]
+
+Explanation
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // return -3
+minStack.pop();
+minStack.top();    // return 0
+minStack.getMin(); // return -2
+```
+
+**Solution**:
+
+Use two stack
+
+```python
+class MinStack:
+
+    def __init__(self):
+        self.min_stack = []
+        self.stack = []
+
+    def push(self, val: int) -> None:
+        if len(self.min_stack) == 0 or self.min_stack[-1] >= val:
+            self.min_stack.append(val)
+        
+        self.stack.append(val)
+
+    def pop(self) -> None:
+        if self.min_stack[-1] == self.stack[-1]:
+            self.min_stack.pop()
+            
+        self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1]
+
+    def getMin(self) -> int:
+        if len(self.min_stack) == 0:
+            return []
+    
+        return self.min_stack[-1]
+
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(val)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
+```
+
+### 150. Evaluate Reverse Polish Notation
+
+Evaluate the value of an arithmetic expression in [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation).
+
+Valid operators are `+`,`-`, `*`, and `/`. Each operand may be an integer or another expression.
+
+**Note** that division between two integers should truncate toward zero.
+
+It is guaranteed that the given RPN expression is always valid. That means the expression would always evaluate to a result, and there will not be any division by zero operation.
+
+
+**Example 1**:
+
+```
+Input: tokens = ["2","1","+","3","*"]
+Output: 9
+Explanation: ((2 + 1) * 3) = 9
+```
+
+**Example 2**:
+
+```
+Input: tokens = ["4","13","5","/","+"]
+Output: 6
+Explanation: (4 + (13 / 5)) = 6
+```
+
+**Example 3**:
+
+```
+Input: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+Output: 22
+Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+= ((10 * (6 / (12 * -11))) + 17) + 5
+= ((10 * (6 / -132)) + 17) + 5
+= ((10 * 0) + 17) + 5
+= (0 + 17) + 5
+= 17 + 5
+= 22
+```
+
+**Solution**:
+
+```python
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+        
+        for c in tokens:
+            if c == '+':
+                stack.append(stack.pop() + stack.pop())
+            elif c == '-':
+                a, b = stack.pop(), stack.pop()
+                stack.append(b - a)
+            elif c == '*':
+                stack.append(stack.pop() * stack.pop())
+            elif c == '/':
+                a, b = stack.pop(), stack.pop()
+                stack.append(int(b / a))
+            else:
+                stack.append(int(c))
+        
+        return stack[0]
+```
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+### 22. Generate Parentheses
+
+Given `n` pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+**Example 1**:
+
+```
+Input: n = 3
+Output: ["((()))","(()())","(())()","()(())","()()()"]
+```
+
+**Example 2**:
+
+```
+Input: n = 1
+Output: ["()"]
+```
+
+**Solution**:
+
+Use recursion and backtracking
+
+```python
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        res = []
+
+        def recurse(s, o, c):
+            if o == c and c == n:
+                res.append(s)
+
+            # If we can open more
+            if o < n:
+                recurse(s+"(", o+1, c)
+
+            # If we can close
+            if c < o:
+                recurse(s+")", o, c+1)
+
+        recurse("", 0, 0)
+
+        return res
+```
 
 ## Trie
 
