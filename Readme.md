@@ -34,6 +34,8 @@ The question maked as "blind" are from famous Blind 75 list.
     2. [Min Stack](#155-min-stack)
     3. [Evaluate Reverse Polish Notation](#150-evaluate-reverse-polish-notation)
     4. [Generate Parentheses](#22-generate-parentheses)
+    5. [Daily Temperatures](#739-daily-temperatures)
+    6. [Car Fleet](#853-car-fleet)
 5. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 6. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -1711,6 +1713,155 @@ class Solution:
         recurse("", 0, 0)
 
         return res
+```
+
+### 739. Daily Temperatures
+
+Given an array of integers `temperatures` represents the daily 
+temperatures, return an array `answer`    such that `answer[i]` is the 
+number of days you have to wait after the `ith` day to get a warmer 
+temperature. If there is no future day for which this is possible, keep 
+`answer[i] == 0` instead.
+
+**Example 1**:
+
+```
+Input: temperatures = [73,74,75,71,69,72,76,73]
+Output: [1,1,4,2,1,1,0,0]
+```
+
+**Example 2**:
+
+```
+Input: temperatures = [30,40,50,60]
+Output: [1,1,1,0]
+```
+
+**Example 3**:
+
+```
+Input: temperatures = [30,60,90]
+Output: [1,1,0]
+```
+
+**Solution**:
+
+Use a monotinic decreasing stack
+
+```python
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        res = [0] * len(temperatures)
+        stack = [] # Decreasing stack
+        
+        # Add each value in the stack with index
+        for i, v in enumerate(temperatures):
+            # If the value we are adding is bigger than the
+            # top one then we need to pop the values
+            # until to top is not smaller than the one we are 
+            # going to add to maintain the decreasing order
+            # and as we are popping we can calculate value
+            # for the index that we are popping
+            while stack and stack[-1][1] < v:
+                index, value = stack.pop()
+                res[index] = i - index
+                
+            stack.append([i, v])
+        
+        return res
+```
+
+Time Complexity: O(n)
+
+Space Complexity: O(n)
+
+### 853. Car Fleet
+
+There are `n` cars going to the same destination along a one-lane road. 
+The destination is `target` miles away.
+
+You are given two integer array `position` and `speed`, both of length 
+`n`, where `position[i]` is the position of the `ith car` and `speed[i]` 
+is the speed of the `ith` car (in miles per hour).
+
+A car can never pass another car ahead of it, but it can catch up to it 
+and drive bumper to bumper **at the same speed**. The faster car will 
+**slow down** to match the slower car's speed. The distance between these 
+two cars is ignored (i.e., they are assumed to have the same position).
+
+A **car fleet** is some non-empty set of cars driving at the same position 
+and same speed. Note that a single car is also a car fleet.
+
+If a car catches up to a car fleet right at the destination point, it will 
+still be considered as one car fleet.
+
+Return the **number of car fleets** that will arrive at the destination.
+
+
+**Example 1**:
+
+```
+Input: target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3]
+Output: 3
+Explanation:
+The cars starting at 10 (speed 2) and 8 (speed 4) become a fleet, meeting each other at 12.
+The car starting at 0 does not catch up to any other car, so it is a fleet by itself.
+The cars starting at 5 (speed 1) and 3 (speed 3) become a fleet, meeting each other at 6. The fleet moves at speed 1 until it reaches target.
+Note that no other cars meet these fleets before the destination, so the answer is 3.
+```
+
+**Example 2**:
+
+```
+Input: target = 10, position = [3], speed = [3]
+Output: 1
+Explanation: There is only one car, hence there is only one fleet.
+```
+
+**Example 3**:
+
+```
+Input: target = 100, position = [0,2,4], speed = [4,2,1]
+Output: 1
+Explanation:
+The cars starting at 0 (speed 4) and 2 (speed 2) become a fleet, meeting each other at 4. The fleet moves at speed 2.
+Then, the fleet (speed 2) and the car starting at 4 (speed 1) become one fleet, meeting each other at 6. The fleet moves at speed 1 until it reaches target.
+```
+
+**Solution**
+
+Sort the cars by their position (O(n log n)) then scan from right to 
+left and keep track of slowest one to arrive at target. If you find
+another slower one increase the fleet number.
+
+```python
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        if len(position) == 1:
+            return 1
+        
+        cars = []
+        
+        for i in range(len(position)):
+            cars.append((position[i], speed[i]))
+        
+        # Sort the cars by position
+        cars.sort()
+        
+        # Calculate time to reach
+        def time_to_reach(car):
+            return ((target-car[0])/car[1]) # target - position / speed
+        
+        slowest_car_speed = -1
+        fleets = 0
+        
+        # Find the slowest one to arrive (right to left)
+        for car in cars[::-1]:
+            if time_to_reach(car) > slowest_car_speed:
+                slowest_car_speed = time_to_reach(car)
+                fleets += 1
+            
+        return fleets
 ```
 
 ## Trie
