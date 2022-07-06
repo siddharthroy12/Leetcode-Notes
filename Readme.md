@@ -37,6 +37,8 @@ The question maked as "blind" are from famous Blind 75 list.
     5. [Daily Temperatures](#739-daily-temperatures)
     6. [Car Fleet](#853-car-fleet)
     7. [Largest Rectangle in Histogram](#84-largest-rectangle-in-histogram)
+5. [Binary Search](#binary-search)
+    1. [Binary Search](#704-binary-search)
 5. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 6. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -1917,6 +1919,54 @@ class Solution:
 
         return largest_area
 ```
+
+## Binary Search
+
+### 704. Binary Search
+
+Given an array of integers `nums` which is sorted in ascending order, and 
+an integer `target`, write a function to search `target` in `nums`. If 
+`target` exists, then return its index. Otherwise, return `-1`.
+
+You must write an algorithm with `O(log n)` runtime complexity.
+
+**Example 1**:
+
+```
+Input: nums = [-1,0,3,5,9,12], target = 9
+Output: 4
+Explanation: 9 exists in nums and its index is 4
+```
+
+**Example 2**:
+
+```
+Input: nums = [-1,0,3,5,9,12], target = 2
+Output: -1
+Explanation: 2 does not exist in nums so return -1
+```
+
+**Solution**
+
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left = 0
+        right = len(nums) - 1
+        
+        while right >= left:
+            mid = (right + left) // 2
+            
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] > target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        
+        return -1
+```
+
 
 ## Trie
 
