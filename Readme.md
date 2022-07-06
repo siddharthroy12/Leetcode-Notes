@@ -39,12 +39,13 @@ The question maked as "blind" are from famous Blind 75 list.
     7. [Largest Rectangle in Histogram](#84-largest-rectangle-in-histogram)
 5. [Binary Search](#binary-search)
     1. [Binary Search](#704-binary-search)
-5. [Trie](#trie)
+    2. [Search a 2D Matrix](#74-search-a-2d-matrix)
+6. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
-6. [Heap and Priority Queue](#heap-and-priority-queue)
+7. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
-7. [Backtracking](#backtracking)
+8. [Backtracking](#backtracking)
     1. [Permutations](#46-permutations)
     2. [Sudoku Solver](#37-sudoku-solver)
 
@@ -1967,6 +1968,60 @@ class Solution:
         return -1
 ```
 
+### 74. Search a 2D Matrix
+
+Write an efficient algorithm that searches for a value `target` in an `m x 
+n` integer matrix matrix. This matrix has the following properties:
+
+- Integers in each row are sorted from left to right.
+- The first integer of each row is greater than the last integer of the 
+previous row.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/10/05/mat.jpg)
+
+```
+Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+Output: true
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2020/10/05/mat2.jpg)
+
+```
+Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
+Output: false
+```
+
+**Solution**:
+
+```python
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        width = len(matrix[0])
+        height = len(matrix)
+        
+        def flat_to_mat(i):
+            return (i//width, i - ((i//width) * width))
+        
+        left = 0
+        right = (width * height) - 1
+        
+        while left <= right:
+            mid = (left+right) // 2
+            x, y = flat_to_mat(mid)
+            
+            if matrix[x][y] > target:
+                right = mid - 1
+            elif matrix[x][y] < target:
+                left = mid + 1
+            else:
+                return True
+        
+        return False
+```
 
 ## Trie
 
