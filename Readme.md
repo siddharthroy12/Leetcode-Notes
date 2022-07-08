@@ -44,12 +44,14 @@ The question maked as "blind" are from famous Blind 75 list.
     4. [Search in Rotated Sorted Array (Blind)](#33-search-in-rotated-sorted-array-blind)
     5. [Find Minimum in Rotated Sorted Array (Blind)](#153-find-minimum-in-rotated-sorted-array-blind)
     6. [Time Based Key-Value Store](#981-time-based-key-value-store)
-6. [Trie](#trie)
+6. [Linked List](#linked-list)
+    1. [Reverse Linked List (Blind)](#206-reverse-linked-list-blind)
+7. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
-7. [Heap and Priority Queue](#heap-and-priority-queue)
+8. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
-8. [Backtracking](#backtracking)
+9. [Backtracking](#backtracking)
     1. [Permutations](#46-permutations)
     2. [Sudoku Solver](#37-sudoku-solver)
 
@@ -2328,6 +2330,60 @@ class TimeMap:
 # obj = TimeMap()
 # obj.set(key,value,timestamp)
 # param_2 = obj.get(key,timestamp)
+```
+
+## Linked List
+
+### 206. Reverse Linked List (Blind)
+
+Given the `head` of a singly linked list, reverse the list, and return 
+the reversed list.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg)
+
+```
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg)
+
+```
+Input: head = [1,2]
+Output: [2,1]
+```
+
+**Example 3**:
+
+```
+Input: head = []
+Output: []
+```
+
+**Solution**:
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        current_node = head
+        prev = None
+        
+        while current_node:
+            next_node = current_node.next
+            current_node.next = prev
+            prev = current_node
+            current_node = next_node
+        
+        return prev
 ```
 
 ## Trie
