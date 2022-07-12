@@ -52,6 +52,7 @@ The question maked as "blind" are from famous Blind 75 list.
     4. [Remove Nth Node From End of List (Blind)](#19-remove-nth-node-from-end-of-list-blind)
     5. [Copy List with Random Pointer](#138-copy-list-with-random-pointer)
     6. [Add Two Numbers](#2-add-two-numbers)
+    7. [Linked List Cycle (Blind)](#141-linked-list-cycle-blind)
 7. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 8. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -2863,6 +2864,69 @@ class Solution:
                 cur = cur.next
         
         return res
+```
+
+### 141. Linked List Cycle (Blind)
+
+Given `head`, the head of a linked list, determine if the linked list has a cycle in it.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the `next` pointer. Internally, `pos` is used to denote the index of the node that tail's `next` pointer is connected to. **Note that `pos` is not passed as a parameter**.
+
+Return `true` if there is a cycle in the linked list. Otherwise, return `false`.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist.png)
+
+```
+Input: head = [3,2,0,-4], pos = 1
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist_test2.png)
+
+```
+Input: head = [1,2], pos = 0
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 0th node.
+```
+
+**Example 3**:
+
+![](https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist_test3.png)
+
+```
+Input: head = [1], pos = -1
+Output: false
+Explanation: There is no cycle in the linked list.
+```
+
+**Solution**:
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        seen = {}
+
+        current = head
+        
+        while current:
+            if current in seen:
+                return True
+            else:
+                seen[current] = True
+            current = current.next
+            
+        return False
 ```
 
 ## Trie
