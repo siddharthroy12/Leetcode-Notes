@@ -3429,7 +3429,7 @@ Output: [[1]]
 
 **Solution**:
 
-```pyhton
+```python
 class Solution:
     def solve(self, nums, results=[], progress=[], used={}):
         for num in nums:
