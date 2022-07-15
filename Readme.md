@@ -58,7 +58,9 @@ The question maked as "blind" are from famous Blind 75 list.
     10. [Merge k Sorted Lists (Blind)](#23-merge-k-sorted-lists-blind)
     11. [Reverse Nodes in k-Group](#25-reverse-nodes-in-k-group)
 7. [Trees](#trees)
-    1. [Invert Binary Tree (Blind)](#226-invert-binary-tree)
+    1. [Invert Binary Tree (Blind)](#226-invert-binary-tree-blind)
+    2. [Maximum Depth of Binary Tree (Blind)](#104-maximum-depth-of-binary-tree-blind)
+    3. [Diameter of Binary Tree](#543-diameter-of-binary-tree)
 8. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 9. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -3265,7 +3267,7 @@ class Solution:
 
 ### Trees
 
-### 226. Invert Binary Tree (Blind)
+#### 226. Invert Binary Tree (Blind)
 
 Given the `root` of a binary tree, invert the tree, and return its *root*.
 
@@ -3314,6 +3316,119 @@ class Solution:
         self.invertTree(root.right)
         
         return root
+```
+
+### 104. Maximum Depth of Binary Tree (Blind)
+
+Given the `root` of a binary tree, return *its maximum depth*.
+
+A binary tree's **maximum depth** is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/11/26/tmp-tree.jpg)
+
+```
+Input: root = [3,9,20,null,null,15,7]
+Output: 3
+```
+
+**Example 2**:
+
+```
+Input: root = [1,null,2]
+Output: 2
+```
+
+**Solution**:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        
+        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
+```
+
+### 543. Diameter of Binary Tree
+
+Given the `root` of a binary tree, return the length of the **diameter** of 
+the tree.
+
+The **diameter** of a binary tree is the **length** of the longest path 
+between any two nodes in a tree. This path may or may not pass through the 
+`root`.
+
+The **length** of a path between two nodes is represented by the number of 
+edges between them.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg)
+
+```
+Input: root = [1,2,3,4,5]
+Output: 3
+Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+```
+
+**Example 2**:
+
+```
+Input: root = [1,2]
+Output: 1
+```
+
+**Solution**:
+
+Count the left and right height for each nodes add them together and the highest diameter (left height + right height + 1) is the answer.
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        if root == None:
+            return 0
+        
+        self.cache = {} # For memoization
+        
+        self.max_diameter = 0
+        
+        self.depthOfBinaryTree(root)
+        
+        return self.max_diameter - 1
+        
+    def depthOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        if root in self.cache:
+            return self.cache[root]
+        
+        if root == None:
+            self.cache[root] = 0
+            return 0
+        
+        lh = self.depthOfBinaryTree(root.left)
+        rh = self.depthOfBinaryTree(root.right)
+        
+        self.max_diameter = max(self.max_diameter, lh+rh+1)
+        
+        h = max(lh, rh) + 1
+        self.cache[root] = h
+        
+        return h
+
 ```
 
 ## Trie
