@@ -55,12 +55,16 @@ The question maked as "blind" are from famous Blind 75 list.
     7. [Linked List Cycle (Blind)](#141-linked-list-cycle-blind)
     8. [Find the Duplicate Number](#287-find-the-duplicate-number)
     9. [LRU Cache](#146-lru-cache)
-7. [Trie](#trie)
+    10. [Merge k Sorted Lists (Blind)](#23-merge-k-sorted-lists-blind)
+    11. [Reverse Nodes in k-Group](#25-reverse-nodes-in-k-group)
+7. [Trees](#trees)
+    1. [Invert Binary Tree (Blind)](#226-invert-binary-tree)
+8. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
-8. [Heap and Priority Queue](#heap-and-priority-queue)
+9. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
-9. [Backtracking](#backtracking)
+10. [Backtracking](#backtracking)
     1. [Permutations](#46-permutations)
     2. [Sudoku Solver](#37-sudoku-solver)
 
@@ -3088,6 +3092,229 @@ class LRUCache:
 # obj.put(key,value)
 ```
 
+### 23. Merge k Sorted Lists (Blind)
+
+You are given an array of `k` linked-lists `lists`, each linked-list is sorted in ascending order.
+
+*Merge all the linked-lists into one sorted linked-list and return it*.
+
+**Example 1**:
+
+```
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+Explanation: The linked-lists are:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+merging them into one sorted list:
+1->1->2->3->4->4->5->6
+```
+
+**Example 2**:
+
+```
+Input: lists = []
+Output: []
+```
+
+**Example 3**:
+
+```
+Input: lists = [[]]
+Output: []
+```
+
+**Solution**:
+
+Use divide and conquer method
+
+![](https://leetcode.com/problems/merge-k-sorted-lists/Figures/23/23_divide_and_conquer_new.png)
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        if not lists:
+            return None
+        
+        while len(lists) > 1:
+            mergedLists = []
+            for i in range(0, len(lists), 2):
+                l1 = lists[i]
+                l2 = lists[i+1] if (i+1) < len(lists) else None
+                mergedLists.append(self.mergeTwoLists(l1, l2))
+            lists = mergedLists
+        
+        return lists[0]
+    
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        new_node = None
+        head = None
+        p1 = list1
+        p2 = list2
+        
+        while p1 or p2:
+            new_value = None
+            
+            if not p1 and p2:
+                new_value = p2.val
+                p2 = p2.next
+            if not p2 and p1:
+                new_value = p1.val
+                p1 = p1.next
+                
+            if p1 and p2:
+                if p1.val > p2.val:
+                    new_value = p2.val
+                    p2 = p2.next
+                else:
+                    new_value = p1.val
+                    p1 = p1.next
+            
+            if not new_node:
+                new_node = ListNode(new_value)
+                head = new_node
+            else:
+                new_node.next = ListNode(new_value)
+                new_node = new_node.next
+        
+        return head
+```
+
+Time Complexity: O(n log k) where k is number of linked list and n
+is total number of nodes in two lists.
+
+Space Complexity: O(1)
+
+### 25. Reverse Nodes in k-Group
+
+Given the `head` of a linked list, reverse the nodes of the list `k` at a 
+time, and return the modified *list*.
+
+`k` is a positive integer and is less than or equal to the length of the 
+linked list. If the number of nodes is not a multiple of `k` then left-out 
+nodes, in the end, should remain as it is.
+
+You may not alter the values in the list's nodes, only nodes themselves 
+may be changed.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/10/03/reverse_ex1.jpg)
+
+```
+Input: head = [1,2,3,4,5], k = 2
+Output: [2,1,4,3,5]
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2020/10/03/reverse_ex2.jpg)
+
+```
+Input: head = [1,2,3,4,5], k = 3
+Output: [3,2,1,4,5]
+```
+
+**Solution**:
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        tmp = []
+        groups = []
+        
+        current = head
+        
+        while current:
+            tmp.append(current.val)
+            
+            if len(tmp) == k:
+                groups.append(tmp)
+                tmp = []
+        
+            current = current.next
+        
+        groups.append(tmp)
+
+        new_list = ListNode(0)
+        new_head = new_list
+        
+        for group in groups:
+            if len(group) == k:
+                group = reversed(group)
+                
+            for num in group:
+                new_list.next = ListNode(num)
+                new_list = new_list.next
+                
+        return new_head.next
+```
+
+### Trees
+
+### 226. Invert Binary Tree (Blind)
+
+Given the `root` of a binary tree, invert the tree, and return its *root*.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/03/14/invert1-tree.jpg)
+
+```
+Input: root = [4,2,7,1,3,6,9]
+Output: [4,7,2,9,6,3,1]
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2021/03/14/invert2-tree.jpg)
+
+```
+Input: root = [2,1,3]
+Output: [2,3,1]
+```
+
+**Example 3**:
+
+```
+Input: root = []
+Output: []
+```
+
+**Solution**:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return None
+        
+        root.left, root.right = root.right, root.left
+        
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        
+        return root
+```
 
 ## Trie
 
