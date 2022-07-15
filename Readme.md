@@ -61,6 +61,8 @@ The question maked as "blind" are from famous Blind 75 list.
     1. [Invert Binary Tree (Blind)](#226-invert-binary-tree-blind)
     2. [Maximum Depth of Binary Tree (Blind)](#104-maximum-depth-of-binary-tree-blind)
     3. [Diameter of Binary Tree](#543-diameter-of-binary-tree)
+    4. [Balanced Binary Tree](#110-balanced-binary-tree)
+    5. [Same Tree (Blind)](#100-same-tree-blind)
 8. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 9. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -3430,6 +3432,130 @@ class Solution:
         return h
 
 ```
+
+### 110. Balanced Binary Tree
+Given a binary tree, determine if it is height-balanced.
+
+For this problem, a height-balanced binary tree is defined as:
+
+>a binary tree in which the left and right subtrees of every node differ in 
+>height by no more than 1.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/10/06/balance_1.jpg)
+
+```
+Input: root = [3,9,20,null,null,15,7]
+Output: true
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2020/10/06/balance_2.jpg)
+
+```
+Input: root = [1,2,2,3,3,null,null,4,4]
+Output: false
+```
+
+**Example 3**:
+
+```
+Input: root = []
+Output: true
+```
+
+**Solution**:
+
+Use dfs and check the lowest one first 
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return True
+        
+        def dfs(root: Optional[TreeNode]) -> [bool, int]:
+            if not root:
+                return [True, 0]
+            
+            l = dfs(root.left)
+            r = dfs(root.right)
+            
+            balanced = (l[0] and r[0] and 
+                        abs(l[1] - r[1]) <= 1)
+            
+            return [balanced, max(l[1], r[1]) + 1]
+        
+        return dfs(root)[0]
+```
+
+### 100. Same Tree (Blind)
+
+Given the roots of two binary trees `p` and `q`, write a function to check if 
+they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical, 
+and the nodes have the same value.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/12/20/ex1.jpg)
+
+```
+Input: p = [1,2,3], q = [1,2,3]
+Output: true
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2020/12/20/ex2.jpg)
+
+```
+Input: p = [1,2], q = [1,null,2]
+Output: false
+```
+
+**Example 3**:
+
+![](https://assets.leetcode.com/uploads/2020/12/20/ex3.jpg)
+
+```
+Input: p = [1,2,1], q = [1,1,2]
+Output: false
+```
+
+**Solution**:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        if p == None and q == None:
+            return True
+        
+        if not (p and q):
+            return False
+        
+        if p.val != q.val:
+            return False
+        
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+```
+
 
 ## Trie
 
