@@ -63,6 +63,8 @@ The question maked as "blind" are from famous Blind 75 list.
     3. [Diameter of Binary Tree](#543-diameter-of-binary-tree)
     4. [Balanced Binary Tree](#110-balanced-binary-tree)
     5. [Same Tree (Blind)](#100-same-tree-blind)
+    6. [Subtree of Another Tree (Blind)](#572-subtree-of-another-tree-blind)
+    7. [Lowest Common Ancestor of a Binary Search Tree (Blind)](#235-lowest-common-ancestor-of-a-binary-search-tree-blind)
 8. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 9. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -3556,6 +3558,104 @@ class Solution:
         return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
 ```
 
+### 572. Subtree of Another Tree (Blind)
+
+Given the roots of two binary trees `root` and `subRoot`, 
+return `true` if there is a subtree of `root` with the same 
+structure and node values of `subRoot` and `false` otherwise.
+
+A subtree of a binary tree `tree` is a tree that consists of 
+a node in `tree` and all of this node's descendants. The 
+tree `tree` could also be considered as a subtree of itself.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/04/28/subtree1-tree.jpg)
+
+```
+Input: root = [3,4,5,1,2], subRoot = [4,1,2]
+Output: true
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2021/04/28/subtree2-tree.jpg)
+
+```
+Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
+Output: false
+```
+
+**Solution**:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        if root == None and subRoot == None:
+            return True
+        
+        if not (root and subRoot):
+            return False
+        
+        return ((self.isSubtree(root.left, subRoot)) or 
+                (self.isSubtree(root.right, subRoot)) or
+                (self.isSameTree(root, subRoot)))
+    
+    def isSameTree(self, tree1: Optional[TreeNode], tree2: Optional[TreeNode]) -> bool:
+        if tree1 == None and tree2 == None:
+            return True
+        
+        if not (tree1 and tree2):
+            return False
+        
+        return ((tree1.val == tree2.val) and
+                (self.isSameTree(tree1.left, tree2.left)) and 
+                (self.isSameTree(tree1.right, tree2.right)))
+```
+
+### 235. Lowest Common Ancestor of a Binary Search Tree (Blind)
+
+Given a binary search tree (BST), find the lowest common 
+ancestor (LCA) node of two given nodes in the BST.
+
+According to the definition of LCA on Wikipedia: "The lowest 
+common ancestor is defined between two nodes `p` and `q` as 
+the lowest node in `T` that has both `p` and `q` as 
+descendants (where we allow **a node to be a descendant of 
+itself**)."
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png)
+
+```
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+Output: 6
+Explanation: The LCA of nodes 2 and 8 is 6.
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png)
+
+```
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+Output: 2
+Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the LCA definition.
+```
+
+**Example 3**:
+
+```
+Input: root = [2,1], p = 2, q = 1
+Output: 2
+```
 
 ## Trie
 
