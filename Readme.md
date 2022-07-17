@@ -65,6 +65,10 @@ The question maked as "blind" are from famous Blind 75 list.
     5. [Same Tree (Blind)](#100-same-tree-blind)
     6. [Subtree of Another Tree (Blind)](#572-subtree-of-another-tree-blind)
     7. [Lowest Common Ancestor of a Binary Search Tree (Blind)](#235-lowest-common-ancestor-of-a-binary-search-tree-blind)
+    8. [Binary Tree Level Order Traversal (Blind)](#102-binary-tree-level-order-traversal-blind)
+    9. [Binary Tree Right Side View](#199-binary-tree-right-side-view)
+    10. [Count Good Nodes in Binary Tree](#1448-count-good-nodes-in-binary-tree)
+    11. [Validate Binary Search Tree (Blind)](#98-validate-binary-search-tree-blind)
 8. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 9. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -3655,6 +3659,253 @@ Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of 
 ```
 Input: root = [2,1], p = 2, q = 1
 Output: 2
+```
+
+### 102. Binary Tree Level Order Traversal (Blind)
+
+Given the `root` of a binary tree, return *the level order 
+traversal of its nodes' values*. (i.e., from left to right, 
+level by level).
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg)
+
+```
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[9,20],[15,7]]
+```
+
+**Example 2**:
+
+```
+Input: root = [1]
+Output: [[1]]
+```
+
+**Example 3**:
+
+```
+Input: root = []
+Output: []
+```
+
+**Solution**:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return  []
+        
+        current_level = [root]
+        res = []
+        
+        while current_level:
+            res.append([node.val for node in current_level])
+            new_level = []
+            for node in current_level:
+                if node.left:
+                    new_level.append(node.left)
+                if node.right:
+                    new_level.append(node.right)
+            current_level = new_level
+            
+        return res
+```
+
+### 199. Binary Tree Right Side View
+
+Given the `root` of a binary tree, imagine yourself standing on the *right side* of it, return the values of the nodes you can see ordered from top to bottom.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/02/14/tree.jpg)
+
+```
+Input: root = [1,2,3,null,5,null,4]
+Output: [1,3,4]
+```
+
+**Example 2**:
+
+```
+Input: root = [1,null,3]
+Output: [1,3]
+```
+
+**Example 3**:
+
+```
+Input: root = []
+Output: []
+```
+
+**Solution**:
+
+Use BFS
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return  []
+        
+        current_level = [root]
+        res = []
+        
+        while current_level:
+            res.append(current_level[-1].val)
+            
+            new_level = []
+            
+            for node in current_level:
+                if node.left:
+                    new_level.append(node.left)
+                if node.right:
+                    new_level.append(node.right)
+                
+            current_level = new_level
+            
+        return res
+```
+
+### 1448. Count Good Nodes in Binary Tree
+
+Given a binary tree `root`, a node X in the tree is named 
+**good** if in the path from root to X there are no nodes 
+with a value greater than X.
+
+Return the number of **good** nodes in the binary tree.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/04/02/test_sample_1.png)
+
+```
+Input: root = [3,1,4,3,null,1,5]
+Output: 4
+Explanation: Nodes in blue are good.
+Root Node (3) is always a good node.
+Node 4 -> (3,4) is the maximum value in the path starting from the root.
+Node 5 -> (3,4,5) is the maximum value in the path
+Node 3 -> (3,1,3) is the maximum value in the path.
+```
+
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2020/04/02/test_sample_2.png)
+
+```
+Input: root = [3,3,null,4,2]
+Output: 3
+Explanation: Node 2 -> (3, 3, 2) is not good, because "3" is higher than it.
+```
+
+**Example 3**:
+
+```
+Input: root = [1]
+Output: 1
+Explanation: Root is considered as good.
+```
+
+**Solution**:
+
+Use dfs and keep track of greatest seen number
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        def dfs(node, greatest):
+            if not node:
+                return 0
+            
+            count = 0
+            
+            if node.val >= greatest:
+                count = 1
+                
+            return count + dfs(node.left, max(node.val, greatest)) + dfs(node.right, max(node.val, greatest))
+        
+        return dfs(root, root.val)
+```
+
+### 98. Validate Binary Search Tree (Blind)
+
+Given the `root` of a binary tree, determine if it is a valid binary search tree 
+(BST).
+
+A **valid BST** is defined as follows:
+
+- The left subtree of a node contains only nodes with keys **less than** the node's 
+key.
+- The right subtree of a node contains only nodes with keys **greater than** the 
+node's key.
+
+- Both the left and right subtrees must also be binary search trees.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/12/01/tree1.jpg)
+
+```
+Input: root = [2,1,3]
+Output: true
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2020/12/01/tree2.jpg)
+
+```
+Input: root = [5,1,4,null,null,3,6]
+Output: false
+Explanation: The root node's value is 5 but its right child's value is 4.
+```
+
+**Solution**:
+
+Use dfs and keep track of high limit and low limit starting at inf and -inf
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def dfs(node, low=-math.inf, high=math.inf) -> bool:
+            if not node:
+                return True
+            
+            if node.val <= low or node.val >= high:
+                return False
+            
+            return dfs(node.left, low, node.val) and dfs(node.right, node.val, high)
+        
+        return dfs(root)
 ```
 
 ## Trie
