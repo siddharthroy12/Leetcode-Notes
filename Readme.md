@@ -69,6 +69,8 @@ The question maked as "blind" are from famous Blind 75 list.
     9. [Binary Tree Right Side View](#199-binary-tree-right-side-view)
     10. [Count Good Nodes in Binary Tree](#1448-count-good-nodes-in-binary-tree)
     11. [Validate Binary Search Tree (Blind)](#98-validate-binary-search-tree-blind)
+    12. [Kth Smallest Element in a BST (Blind)](#230-kth-smallest-element-in-a-bst-blind)
+    12. [Construct Binary Tree from Preorder and Inorder Traversal (Blind)](#105-construct-binary-tree-from-preorder-and-inorder-traversal-blind)
 8. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
 9. [Heap and Priority Queue](#heap-and-priority-queue)
@@ -3906,6 +3908,124 @@ class Solution:
             return dfs(node.left, low, node.val) and dfs(node.right, node.val, high)
         
         return dfs(root)
+```
+
+### 230. Kth Smallest Element in a BST (Blind)
+
+Given the `root` of a binary search tree, and an integer `k`, 
+return the `kth` smallest value (**1-indexed**) of all the 
+values of the nodes in the tree.
+
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg)
+
+```
+Input: root = [3,1,4,null,2], k = 1
+Output: 1
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2021/01/28/kthtree2.jpg)
+
+```
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+Output: 3
+```
+
+**Solution**:
+
+Use inorder traversal (preferably using iteration)
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        stack = []
+        
+        while True:
+            while root:
+                stack.append(root)
+                root = root.left
+                
+            root = stack.pop()
+            
+            k -= 1
+            
+            if not k:
+                return root.val
+            root = root.right
+```
+
+Time Complexity: O(H+K) where H is the height of the tree
+
+Space Complexity: O(H)
+
+### 105. Construct Binary Tree from Preorder and Inorder Traversal (Blind)
+
+Given two integer arrays `preorder` and `inorder` where 
+`preorder` is the preorder traversal of a binary tree and 
+`inorder` is the inorder traversal of the same tree, 
+construct and return the *binary tree*.
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2021/02/19/tree.jpg)
+
+```
+Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+Output: [3,9,20,null,null,15,7]
+```
+
+**Example 2**:
+
+```
+Input: preorder = [-1], inorder = [-1]
+Output: [-1]
+```
+
+**Solution**
+
+The first element of the preorder is the root node
+and we can know which ones will go to left and right by 
+
+finding the number in the inorder list, all the numbers on 
+the left side will go in left side of the tree and all the 
+numbers on the right side will go right side of the tree
+
+if `mid` is the index of the root node in inorder
+then the ``1 to `mid + 1` **(exclusive)** of preorder and 
+`0` to `mid` **(exclusive)** of inorder will go to left 
+and `mid + 1` to last of preorder and inorder will go to 
+right
+
+Do this recursively
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        if not preorder or not inorder:
+            return None
+        
+        root = TreeNode(preorder[0])
+        mid = inorder.index(preorder[0])
+        root.left = self.buildTree(preorder[1:mid+1], inorder[:mid])
+        root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
+        
+        return root
 ```
 
 ## Trie
