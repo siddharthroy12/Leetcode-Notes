@@ -71,8 +71,11 @@ The question maked as "blind" are from famous Blind 75 list.
     11. [Validate Binary Search Tree (Blind)](#98-validate-binary-search-tree-blind)
     12. [Kth Smallest Element in a BST (Blind)](#230-kth-smallest-element-in-a-bst-blind)
     12. [Construct Binary Tree from Preorder and Inorder Traversal (Blind)](#105-construct-binary-tree-from-preorder-and-inorder-traversal-blind)
+    13. [Binary Tree Maximum Path Sum (Blind)](#124-binary-tree-maximum-path-sum-blind)
+    14. [Serialize and Deserialize Binary Tree (Blind)](#297-serialize-and-deserialize-binary-tree-blind)
 8. [Trie](#trie)
     1. [Implement Trie (Blind)](#208-implement-trie-blind)
+    2. [Design Add and Search Words Data Structure (Blind)](#211-design-add-and-search-words-data-structure-blind)
 9. [Heap and Priority Queue](#heap-and-priority-queue)
     1. [Kth Largest Element in a Stream](#703-kth-largest-element-in-a-stream)
     2. [Last Stone Weight](#1046-last-stone-weight)
@@ -4028,6 +4031,140 @@ class Solution:
         return root
 ```
 
+### 124. Binary Tree Maximum Path Sum (Blind)
+
+A **path**   in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence **at most once**. Note that the path does not need to pass through the root.
+
+The **path sum** of a path is the sum of the node's values in the path.
+
+Given the `root` of a binary tree, return the maximum **path sum** of any **non-empty** path.
+
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/10/13/exx1.jpg)
+
+```
+Input: root = [1,2,3]
+Output: 6
+Explanation: The optimal path is 2 -> 1 -> 3 with a path sum of 2 + 1 + 3 = 6.
+```
+
+**Example 2**:
+
+![](https://assets.leetcode.com/uploads/2020/10/13/exx2.jpg)
+
+```
+Input: root = [-10,9,20,null,null,15,7]
+Output: 42
+Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
+```
+
+**Solution**:
+
+Use dfs calculate the max sum of lower nodes first then upper
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        res = root.val
+        
+        def dfs(root: Optional[TreeNode]) -> int:
+            nonlocal res
+            if not root:
+                return 0
+            
+            left = max(dfs(root.left), 0)
+            right = max(dfs(root.right), 0)
+            
+            total = left + right + root.val
+            
+            res = max(res, total)
+            
+            return max(left, right) + root.val
+        
+        dfs(root)
+        return res
+```
+
+### 297. Serialize and Deserialize Binary Tree (Blind)
+
+**Example 1**:
+
+![](https://assets.leetcode.com/uploads/2020/09/15/serdeser.jpg)
+
+```
+Input: root = [1,2,3,null,null,4,5]
+Output: [1,2,3,null,null,4,5]
+```
+
+**Example 2**:
+
+```
+Input: root = []
+Output: []
+```
+
+**Solution**:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Codec:
+    def serialize(self, root):
+        def dfs(node) -> str:
+            if not node:
+                return "n"
+            
+            s = str(node.val) + ","
+            
+            s += dfs(node.left) + ","
+            s += dfs(node.right)
+            
+            return s
+    
+        return dfs(root)
+    
+    def deserialize(self, data):
+        l = data.split(",")
+        
+        i = 0
+        
+        def dfs():
+            nonlocal i
+            
+            if l[i] == "n":
+                i += 1
+                return None
+            
+            node = TreeNode(int(l[i]))
+            
+            i += 1
+            
+            node.left = dfs()
+            node.right = dfs()
+        
+            return node
+        
+        return dfs()
+
+# Your Codec object will be instantiated and called as such:
+# ser = Codec()
+# deser = Codec()
+# ans = deser.deserialize(ser.serialize(root))
+```
+
 ## Trie
 
 ### 208. Implement Trie (Blind)
@@ -4168,6 +4305,102 @@ Trie.prototype.startsWith = function(prefix) {
 
 Every method in this class has Time Complexity of O(n) where n is the
 length of the input word.
+
+### 211. Design Add and Search Words Data Structure (Blind)
+
+Design a data structure that supports adding new words and finding if a string matches any previously added string.
+
+Implement the `WordDictionary` class:
+
+- `WordDictionary()` Initializes the object.
+- `void addWord(word)` Adds `word` to the data structure, it can be matched later.
+- `bool search(word)` Returns `true` if there is any string in the data structure 
+that matches `word` or `false` otherwise. `word` may contain   
+dots `'.'` where dots can be matched with any letter.
+
+**Example***:
+
+```
+Input
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+Output
+[null,null,null,null,false,true,true,true]
+
+Explanation
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord("bad");
+wordDictionary.addWord("dad");
+wordDictionary.addWord("mad");
+wordDictionary.search("pad"); // return False
+wordDictionary.search("bad"); // return True
+wordDictionary.search(".ad"); // return True
+wordDictionary.search("b.."); // return True
+```
+
+**Solution**:
+
+```python
+class Node:
+    def __init__(self, value, end):
+        self.value = value
+        self.nexts = {}
+        self.end = end
+
+class WordDictionary:
+
+    def __init__(self):
+        self.root = Node(None, False)
+
+    def addWord(self, word: str) -> None:
+        current = self.root
+        
+        for i, letter in enumerate(word):
+            if letter not in current.nexts:
+                current.nexts[letter] = Node(letter, False)
+                
+            if i == len(word)-1:
+                current.nexts[letter].end = True
+            else:
+                current = current.nexts[letter]
+            
+
+    def search(self, word: str) -> bool:
+        
+        def dfs(node, pointer) -> bool:
+            if pointer >= len(word):
+                return False
+            
+            letter = word[pointer]
+            
+            if letter != ".":
+                if letter in node.nexts:
+                    if pointer == len(word) - 1 and node.nexts[letter].end:
+                        return True
+                    return dfs(node.nexts[word[pointer]], pointer+1)
+                else:
+                    return False
+            else:
+                if not len(node.nexts):
+                    return False
+                
+                for k in node.nexts:
+                    if pointer == len(word) - 1 and node.nexts[k].end:
+                        return True
+                    
+                    if dfs(node.nexts[k], pointer+1):
+                        return True
+                
+                return False
+        
+        return dfs(self.root, 0)
+
+
+# Your WordDictionary object will be instantiated and called as such:
+# obj = WordDictionary()
+# obj.addWord(word)
+# param_2 = obj.search(word)
+```
 
 ## Heap and Priority Queue
 
