@@ -90,3 +90,5 @@ The question maked as "blind" are from famous Blind 75 list.
     2. [Sudoku Solver](./backtracking/sudoku-solver.md)
     3. [Subsets](./backtracking/subsets.md)
     4. [Combination Sum (Blind)](./backtracking/combination-sum.md)
+    5. [Subsets II](./backtracking/subsets-ii.md)
+    6. [Word Search](./backtracking/word-search.md)
