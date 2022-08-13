@@ -91,4 +91,7 @@ The question maked as "blind" are from famous Blind 75 list.
     3. [Subsets](./backtracking/subsets.md)
     4. [Combination Sum (Blind)](./backtracking/combination-sum.md)
     5. [Subsets II](./backtracking/subsets-ii.md)
-    6. [Word Search](./backtracking/word-search.md)
+    6. [Word Search (Blind)](./backtracking/word-search.md)
+    7. [Palindrome Partitioning](./backtracking/palindrome-partitioning.md)
+    8. [Letter Combinations of a Phone Number](./backtracking/letter-combinations-of-a-phone-number.md)
+    9. [N-Queens](./backtracking/n-queens.md)
