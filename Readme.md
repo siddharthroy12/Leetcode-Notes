@@ -95,3 +95,5 @@ The question maked as "blind" are from famous Blind 75 list.
     7. [Palindrome Partitioning](./backtracking/palindrome-partitioning.md)
     8. [Letter Combinations of a Phone Number](./backtracking/letter-combinations-of-a-phone-number.md)
     9. [N-Queens](./backtracking/n-queens.md)
+11. Graphs
+    1. [Number of Islands](./graphs/number-of-islands.md)
