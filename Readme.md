@@ -96,4 +96,6 @@ The question maked as "blind" are from famous Blind 75 list.
     8. [Letter Combinations of a Phone Number](./backtracking/letter-combinations-of-a-phone-number.md)
     9. [N-Queens](./backtracking/n-queens.md)
 11. Graphs
-    1. [Number of Islands](./graphs/number-of-islands.md)
+    1. [Number of Islands (Blind)](./graphs/number-of-islands.md)
+    2. [Clone Graph (Blind)](./graphs/clone-graph.md)
+    3. [Max Area of Island](./graphs/max-area-of-islands.md)
