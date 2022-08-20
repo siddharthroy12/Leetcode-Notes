@@ -99,3 +99,7 @@ The question maked as "blind" are from famous Blind 75 list.
     1. [Number of Islands (Blind)](./graphs/number-of-islands.md)
     2. [Clone Graph (Blind)](./graphs/clone-graph.md)
     3. [Max Area of Island](./graphs/max-area-of-islands.md)
+    4. [Pacific Atlantic Water Flow (Blind)](./graphs/pacific-atlantic-water-flow.md)
+    5. [Surrounded Regions](./graphs/surrounded-regions.md)
+    6. [Rotting Oranges](./graphs/rotting-oranges.md)
+    
