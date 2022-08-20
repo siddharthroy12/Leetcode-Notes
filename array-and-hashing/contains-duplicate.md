@@ -44,6 +44,25 @@ var containsDuplicate = function(nums) {
 }
 ```
 
+```cpp
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        std::unordered_map<int, bool> seen;
+        
+        for (auto num: nums) {
+            if (seen.find(num) != seen.end()) {
+                return true;
+            } else {
+                seen[num] = true;
+            }
+        }
+        
+        return false;
+    }
+};
+```
+
 Time Complexity: O(n)
 
 Space Complexity O(n)

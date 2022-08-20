@@ -61,6 +61,49 @@ var groupAnagrams = function(strs) {
 };
 ```
 
+Using counting sort
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> groups;
+        
+        for (auto str : strs) {
+            string sorted = this->sortString(str);
+            
+            groups[sorted].push_back(str);
+        }
+        
+        vector<vector<string>> res;
+        
+        for (auto pair : groups) {
+            res.push_back(groups[pair.first]);
+        }
+        
+        return res;
+    }
+    
+    string sortString(string str) {
+        int counts[26] = { 0 };
+        
+        for (auto letter : str) {
+            counts[(int)letter - (int)'a'] += 1;
+        }
+        
+        string res;
+        
+        for (char i = 0; i < 26; i++) {
+            for (int j = 0; j < counts[i]; j++) {
+                res.push_back(i + 'a');
+            }
+        }
+        
+        return res;
+    }
+};
+```
+
 Time Complexity: O(m * n) where n is the number of strings and m is
 the average length of the string.
 

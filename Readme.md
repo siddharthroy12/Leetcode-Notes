@@ -102,4 +102,4 @@ The question maked as "blind" are from famous Blind 75 list.
     4. [Pacific Atlantic Water Flow (Blind)](./graphs/pacific-atlantic-water-flow.md)
     5. [Surrounded Regions](./graphs/surrounded-regions.md)
     6. [Rotting Oranges](./graphs/rotting-oranges.md)
-    
+    7. [Walls and Gates](./graphs/walls-and-gates.md)

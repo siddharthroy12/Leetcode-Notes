@@ -55,6 +55,30 @@ var twoSum = function(nums, target) {
 };
 ```
 
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> res;
+        unordered_map<int, int> seen;
+        
+        for (int i = 0; i < nums.size(); i++) {
+            int other = target - nums[i];
+            
+            if (seen.find(other) != seen.end()) {
+                res.push_back(seen[other]);
+                res.push_back(i);
+                break;
+            }
+            
+            seen[nums[i]] = i;
+        }
+        
+        return res;
+    }
+};
+```
+
 Time Complexity: O(n)
 
 Space Complexity O(n)

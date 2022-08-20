@@ -62,6 +62,35 @@ var isAnagram = function(s, t) {
 };
 ```
 
+```cpp
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        std::unordered_map<char, int> letter_count_s;
+        
+        for (auto c : s) {
+            if (letter_count_s.find(c) == letter_count_s.end()) {
+                letter_count_s[c] = 1;
+            } else {
+                letter_count_s[c]++;
+            }
+        }
+        
+        std::unordered_map<char, int> letter_count_t;
+        
+        for (auto c : t) {
+            if (letter_count_t.find(c) == letter_count_t.end()) {
+                letter_count_t[c] = 1;
+            } else {
+                letter_count_t[c]++;
+            }
+        }
+        
+        return letter_count_s == letter_count_t;
+    }
+};
+```
+
 Time complexity: O(a+b)
 
 Space complexity O(M) where m is the size of different letters

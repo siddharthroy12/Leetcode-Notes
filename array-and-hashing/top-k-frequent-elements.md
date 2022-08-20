@@ -71,6 +71,45 @@ var topKFrequent = function(nums, k) {
 };
 ```
 
+```cpp
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> frequencies; // number to frequency
+        
+        for (auto num : nums) {
+            frequencies[num]++;
+        }
+        
+        unordered_map<int, vector<int>> invFrequencies; // frequency to number
+        
+        for (auto pair : frequencies) {
+            invFrequencies[pair.second].push_back(pair.first);
+        }
+        
+        vector<int> res;
+        
+        for (int i = nums.size(); i > -1; i--) {
+            if (invFrequencies.find(i) != invFrequencies.end()) {
+                for (auto num : invFrequencies[i]) {
+                    res.push_back(num);
+                    
+                    if (res.size() == k) {
+                        break;
+                    }
+                }
+            }
+            
+            if (res.size() == k) {
+                break;
+            }
+        }
+        
+        return res;
+    }
+};
+```
+
 Time Complexity: O(n)
 
 Space Complexity O(n)
