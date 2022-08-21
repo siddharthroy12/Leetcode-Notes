@@ -64,3 +64,43 @@ class Solution:
 
         return answer
 ```
+
+```cpp
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> productsFromLeft(nums.size());
+        vector<int> productsFromRight(nums.size());
+        vector<int> res(nums.size());
+        
+        // Calculate products from left to right
+        int product = 1;
+        for (int i = 0; i < nums.size(); i++) {
+            product *= nums[i];
+            productsFromLeft[i] = product;
+        }
+        
+        // Calculate products from right to left
+        product = 1;
+        for (int i = nums.size()-1; i > -1; i--) {
+            product *= nums[i];
+            productsFromRight[i] = product;
+        }
+        
+        for (int i = 0; i < nums.size(); i++) {
+            int product = 1;
+            
+            if (i > 0) {
+                product *= productsFromLeft[i-1];
+            }
+            
+            if (i < nums.size()-1) {
+                product *= productsFromRight[i+1];
+            }
+            res[i] = product;
+        }
+        
+        return res;
+    }
+};
+```
