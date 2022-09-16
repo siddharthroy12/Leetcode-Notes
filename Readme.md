@@ -103,3 +103,5 @@ The question maked as "blind" are from famous Blind 75 list.
     5. [Surrounded Regions](./graphs/surrounded-regions.md)
     6. [Rotting Oranges](./graphs/rotting-oranges.md)
     7. [Walls and Gates](./graphs/walls-and-gates.md)
+    8. [Course Schedule](./graphs/course-schedule.md)
+    9. [Course Schedule II](./graphs/course-schedule-ii.md)
