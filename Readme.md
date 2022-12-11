@@ -105,3 +105,4 @@ The question maked as "blind" are from famous Blind 75 list.
     7. [Walls and Gates](./graphs/walls-and-gates.md)
     8. [Course Schedule](./graphs/course-schedule.md)
     9. [Course Schedule II](./graphs/course-schedule-ii.md)
+    10. [Redundant Connection](./graphs/redundant-connection.md)
