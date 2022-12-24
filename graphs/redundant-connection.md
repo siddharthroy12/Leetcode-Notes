@@ -1,7 +1,6 @@
 # 684. Redundant Connection
 
-Basically what you need to do is check for each edge if they have common ancestor if they do,
-don't add them to the family tree or else add them to the bottom of the tree
+Use Union find
 
 ```python
 class Solution:
@@ -13,6 +12,7 @@ class Solution:
         def find(n):
             p = parents[n]
             while p != parents[p]:
+                parents[p] = parents[parents[p]]
                 p = parents[p]
             return p
 
