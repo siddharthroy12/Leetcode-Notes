@@ -110,4 +110,4 @@ The question maked as "blind" are from famous Blind 75 list.
     12. [Graph Valid Tree (Blind)](./graphs/graph-valid-tree.md)
     13. [Word Ladder](./graphs/word-ladder.md)
 12. Advance Graphs
-13. [Reconstruct Itinerary](./advance-graph/reconstruct-itinerary.md)
+    1. [Reconstruct Itinerary](./advance-graph/reconstruct-itinerary.md)
